@@ -1,0 +1,100 @@
+<!-- AIzaSyBzlCLTInavJ5U0sPJVa01pI9oNFC8EhPc -->
+
+<!-- https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=Kgf%202&key=[YOUR_API] -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        p{
+            color: aqua;
+            font-size: xx-large;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        
+        body{
+            background-color: black;
+        }
+        #main{
+            display: flex;
+            gap: 20px;
+        }
+        #Display{
+            border: 1px solid black;
+            margin-left: 10px;
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            grid-gap: 5%;
+        }
+        
+        #nav{
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
+            width: 300px;
+            height: 800px;
+            /* position: fixed; */
+        }
+    </style>
+</head>
+<body>
+    <h1 style="color: aqua;">youtube</h1>
+    <input type="text" name="" id="query">
+    <button onclick="searcBideos()">search</button>
+    <div id="main">
+    <div id="nav"><p></p>
+    <p>about</p>
+    <p>home</p>
+    <p>trending</p>
+    <p>downloads</p>
+    <p>search</p>
+    <p>content</p>
+    <p>yt studio</p></div>
+    <div id="Display"></div>
+</div>
+</body>
+</html>
+<script>
+    const API = "AIzaSyBzlCLTInavJ5U0sPJVa01pI9oNFC8EhPc"
+    const searcBideos = async () => {
+        try{
+            const q = document.getElementById("query").value 
+
+            const res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=80&q=${q}%202&key=${API}`)
+            const data = await res.json();
+            append(data.items);
+            console.log(data.items)
+        }catch(err){
+            console.log(err)
+        }
+    }
+
+    const append = (videos)  => {
+        let display = document.getElementById("Display");
+        display.innerHTML = null;
+        videos.forEach(({id:{videoId},snippet: {title}}) => {
+            let div = document.createElement("div");
+
+            let iframe = document.createElement("iframe");
+
+            iframe.src = `https://www.youtube.com/embed/${videoId}`
+            iframe.width = "100%";
+            iframe.height= "100%";
+            iframe.allow = "fullscreen";
+            
+            let tle  = document.createElement("h5");
+
+            tle.innerText = title;
+            tle.style.color = "aqua"
+
+            div.append(iframe,tle);
+
+            display.append(div);
+        });
+    }
+
+
+</script>
